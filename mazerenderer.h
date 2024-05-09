@@ -23,7 +23,10 @@ class MazeRenderer
         QGraphicsScene* m_scene;
         std::vector<std::vector<BitmapStatus>> m_bitmap;
 
+	// create the scene
 	void generateScene(QGraphicsScene*& scene);
+
+	// generate the basic bitmap
 	void generateBitmap();
 
       public:
@@ -34,13 +37,20 @@ class MazeRenderer
                 generateBitmap();
                 update();
         };
+
         ~MazeRenderer() { delete m_scene; }
 
+	// set multiple cell type
 	void setVertexStatus(std::list<unsigned int> labels,
 			     BitmapStatus status);
+
+	// set a vertex cell type
 	void setVertexStatus(unsigned int labels, BitmapStatus status);
+
+	// reset the bitmap, all cell is set to normal.
 	void resetBitmap();
 
+	// load the scene
 	void update();
 };
 

@@ -1,9 +1,10 @@
 #include "maze.h"
 
 #include <cstddef>
-#include <random>
 #include <vector>
 
+// look in a set direction in the literal graph matrix.
+// if the resulting index is invalid, there is no adjacent vertex
 bool
 Maze::hasAdjacentVertex(int collumn, int line, size_t limit,
 			Direction direction)
@@ -22,16 +23,8 @@ Maze::hasAdjacentVertex(int collumn, int line, size_t limit,
 	}
 }
 
-unsigned int
-Maze::randomRange(unsigned int min, unsigned int max)
-{
-	std::random_device rd;  // obtain a random number from hardware
-	std::mt19937 gen(rd()); // seed the generator
-	std::uniform_int_distribution<unsigned int> distr(
-	    min, max); // define the range
-	return distr(gen);
-}
-
+// return the x and y coordinates of a vertex in the literal
+// graph matrix.
 bool
 Maze::findMatrixLabelCoordinate(unsigned int label,
 				Vector2D& ret_coordinate) const
@@ -47,6 +40,8 @@ Maze::findMatrixLabelCoordinate(unsigned int label,
 	return false;
 }
 
+// search in the vertex's adjacency matrix, look for
+// the vertex neighbour based of the 1's in the vertex line.
 std::list<unsigned int>
 Maze::getMatrixNeighbours(unsigned int label) const
 {
@@ -61,6 +56,8 @@ Maze::getMatrixNeighbours(unsigned int label) const
 	return neighbours;
 };
 
+// generate the the literal grid of the graph matrix
+// and also create the adjacency matrix of that graph
 void
 Maze::generateMatrix(size_t size)
 {

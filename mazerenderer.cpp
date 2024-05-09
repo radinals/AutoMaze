@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QRect>
 
+// set vertex's cell status in the bitmap
 void
 MazeRenderer::setVertexStatus(std::list<unsigned int> labels,
 			      BitmapStatus status)
@@ -18,6 +19,7 @@ MazeRenderer::setVertexStatus(std::list<unsigned int> labels,
 	}
 }
 
+// set mmultple vertex's cell status in the bitmap
 void
 MazeRenderer::setVertexStatus(unsigned int label, BitmapStatus status)
 {
@@ -26,6 +28,8 @@ MazeRenderer::setVertexStatus(unsigned int label, BitmapStatus status)
 	m_bitmap[coordinate.getY()][coordinate.getX()] = status;
 }
 
+// generate the basic bitmap, only containing the empy cell and
+// the walls if one exists
 void
 MazeRenderer::generateBitmap()
 {
@@ -46,6 +50,7 @@ MazeRenderer::generateBitmap()
 	}
 }
 
+// reset the bitmap, all cell set to normal
 void
 MazeRenderer::resetBitmap()
 {
@@ -54,6 +59,7 @@ MazeRenderer::resetBitmap()
 	    std::vector(m_maze->getMatrixSize(), BitmapStatus::BM_NORMAL));
 }
 
+// generate the scene based of the bitmap
 void
 MazeRenderer::generateScene(QGraphicsScene*& scene)
 {
@@ -108,6 +114,7 @@ MazeRenderer::generateScene(QGraphicsScene*& scene)
 	}
 }
 
+// generate and load the scene
 void
 MazeRenderer::update()
 {
