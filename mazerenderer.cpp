@@ -70,6 +70,11 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 	switch (event->button()) {
 	case Qt::LeftButton:
 		position = mapToScene(event->pos());
+		if (position.x() * position.y() >
+			((m_cell_height * m_cell_width) *
+			 m_maze->getVertexAmount()) ||
+		    position.x() < 0 || position.x() < 0)
+			return;
 		break;
 	default:
 		return;
@@ -80,6 +85,17 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 
 	switch (m_ui_mode) {
 	case MazeUiMode::UM_DrawWall: {
+
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getMatrixLabel(m_maze->getStartCoordinate()) ==
+			clicked_vertex) {
+			return;
+		}
+		if (m_maze->getEndCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getMatrixLabel(m_maze->getEndCoordinate()) ==
+			clicked_vertex) {
+			return;
+		}
 		if (m_maze->isWall(clicked_vertex)) {
 			setVertexStatus(clicked_vertex,
 					BitmapStatus::BM_NORMAL);
@@ -90,17 +106,75 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 		}
 	} break;
 	case MazeUiMode::UM_DrawSource: {
-		setVertexStatus(clicked_vertex, BitmapStatus::BM_SOURCE);
+
+		unsigned int old_start_vertex;
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0)) {
+			old_start_vertex = m_maze->getMatrixLabel(
+			    m_maze->getStartCoordinate());
+			setVertexStatus(old_start_vertex,
+					BitmapStatus::BM_NORMAL);
+		}
+
+		unsigned int end_vertex;
+		if (m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
+			end_vertex =
+			    m_maze->getMatrixLabel(m_maze->getEndCoordinate());
+		}
+
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
+
+			if (end_vertex == clicked_vertex ||
+			    clicked_vertex == old_start_vertex)
+				return;
+		}
+
 		Vector2D tmp;
 		m_maze->findMatrixLabelCoordinate(clicked_vertex, tmp);
+
+		setVertexStatus(clicked_vertex, BitmapStatus::BM_SOURCE);
+
 		m_maze->setStartEndCoordinates(tmp, m_maze->getEndCoordinate());
+
+		if (m_maze->isWall(clicked_vertex)) {
+			m_maze->unsetWall(clicked_vertex);
+		}
+
 	} break;
 	case MazeUiMode::UM_DrawEnd: {
-		setVertexStatus(clicked_vertex, BitmapStatus::BM_END);
+
+		unsigned int start_vertex;
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0)) {
+			start_vertex = m_maze->getMatrixLabel(
+			    m_maze->getStartCoordinate());
+		}
+
+		unsigned int old_end_vertex;
+		if (m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
+			old_end_vertex =
+			    m_maze->getMatrixLabel(m_maze->getEndCoordinate());
+			setVertexStatus(old_end_vertex,
+					BitmapStatus::BM_NORMAL);
+		}
+
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
+
+			if (old_end_vertex == clicked_vertex ||
+			    clicked_vertex == start_vertex)
+				return;
+		}
+
 		Vector2D tmp;
 		m_maze->findMatrixLabelCoordinate(clicked_vertex, tmp);
+
+		setVertexStatus(clicked_vertex, BitmapStatus::BM_END);
+
 		m_maze->setStartEndCoordinates(m_maze->getStartCoordinate(),
 					       tmp);
+		if (m_maze->isWall(clicked_vertex)) {
+			m_maze->unsetWall(clicked_vertex);
+		}
 	} break;
 	default:
 		return;

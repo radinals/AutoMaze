@@ -18,8 +18,8 @@ class Maze
 	};
 
 	// start end end of the maze
-	Vector2D m_start;
-	Vector2D m_end;
+	Vector2D m_start = {-1, -1};
+	Vector2D m_end = {-1, -1};
 
 	// adjacency matrix of the graph
 	std::vector<std::vector<bool>> m_adjacency_matrix;
@@ -88,6 +88,8 @@ class Maze
 	{
 		m_start = start;
 		m_end = end;
+		if (m_start < Vector2D(0, 0))
+			return;
 		m_weight_matrix = generateWeight(getMatrixLabel(start));
 	}
 

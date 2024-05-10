@@ -28,15 +28,7 @@ class MainWindow : public QMainWindow
       private slots:
         void on_ResetBtn_clicked();
 
-        void on_SetSourceBtn_clicked();
-
-        void on_SetDestinationBtn_clicked();
-
-        void on_ToggleWalBtn_clicked();
-
         void on_SolveBtn_clicked();
-
-        void on_mazeSizeIn_editingFinished();
 
         void on_SetSourceRadio_clicked();
 
