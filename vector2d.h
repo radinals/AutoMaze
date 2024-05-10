@@ -26,34 +26,39 @@ class Vector2D
 		m_x = obj.getX();
 	}
 
-	inline Vector2D operator+(const Vector2D& obj)
+	inline Vector2D operator+(const Vector2D& obj) const
 	{
 		return Vector2D(m_x + obj.getX(), m_y + obj.getY());
 	}
 
-	inline Vector2D operator-(const Vector2D& obj)
+	inline Vector2D operator-(const Vector2D& obj) const
 	{
 		return Vector2D(m_x - obj.getX(), m_y - obj.getY());
 	}
 
-	inline bool operator<(const Vector2D& obj)
+	inline bool operator<(const Vector2D& obj) const
 	{
 		return ((m_x < obj.getX()) && (m_y < obj.getY()));
 	}
 
-	inline bool operator<=(const Vector2D& obj)
+	inline bool operator<=(const Vector2D& obj) const
 	{
 		return ((m_x <= obj.getX()) && (m_y <= obj.getY()));
 	}
 
-	inline bool operator>(const Vector2D& obj)
+	inline bool operator>(const Vector2D& obj) const
 	{
 		return ((m_x > obj.getX()) && (m_y > obj.getY()));
 	}
 
-	inline bool operator>=(const Vector2D& obj)
+	inline bool operator>=(const Vector2D& obj) const
 	{
 		return ((m_x >= obj.getX()) && (m_y >= obj.getY()));
+	}
+
+	inline bool operator==(const Vector2D& obj) const
+	{
+		return ((m_x == obj.getX()) && (m_y == obj.getY()));
 	}
 };
 
