@@ -8,7 +8,7 @@
 #include <queue>
 
 void
-MazeSolver::dijkstra(const Maze& maze, std::list<unsigned int>& result)
+MazeSolver::spBFS(const Maze& maze, std::list<unsigned int>& result)
 {
 	// destination and source
 	const unsigned int source =
@@ -79,7 +79,88 @@ MazeSolver::dijkstra(const Maze& maze, std::list<unsigned int>& result)
 	unsigned int current = destination;
 
 	// backtrack from the end (destination)
-	while (current != 0) {
+	while (current != source) {
+		// idk.. this somehow gives back the shortest path?
+		result.push_back(current);
+		current = predecessor[current];
+	}
+
+	result.push_back(source);
+}
+
+void
+MazeSolver::spDijkstra(const Maze& maze, std::list<unsigned int>& result)
+{
+	// destination and source
+	const unsigned int source =
+	    maze.getMatrixLabel(maze.getStartCoordinate());
+	const unsigned int destination =
+	    maze.getMatrixLabel(maze.getEndCoordinate());
+
+	const unsigned int INF = UINT_MAX;
+
+	// all distance is set to infinite
+	std::vector<unsigned int> distance(maze.getVertexAmount(), INF);
+
+	// map of a labels predecessor
+	std::map<unsigned int, unsigned int> predecessor;
+
+	// set all label predecessor to 0
+	for (unsigned int label = 0; label < maze.getVertexAmount(); label++) {
+		predecessor[label] = 0;
+	}
+
+	// set distance of the source (start) to 0
+	distance[source] = 0;
+
+	// queue of vertexis that's being processed
+	std::priority_queue<std::pair<unsigned int, unsigned int>> vertex_queue;
+
+	// push the source vertex to the queue
+	vertex_queue.push(std::make_pair(0, source));
+
+	unsigned int max_distance = maze.calculateDistance(source, destination);
+
+	while (!vertex_queue.empty()) {
+
+		// get the vertex in the front
+		unsigned int current_vertex = vertex_queue.top().second;
+		unsigned int current_vertex_distance = vertex_queue.top().first;
+		vertex_queue.pop();
+
+		// if current vertex is the destination, exit the loop
+		if (current_vertex == destination) {
+			break;
+		}
+
+		if (current_vertex_distance > max_distance) {
+			continue;
+		}
+
+		// for every neighbour of the current vertex
+		for (unsigned int neighbour :
+		     maze.getMatrixNeighbours(current_vertex)) {
+
+			// if the current neigbour is a wall, skip it
+			if (maze.isWall(neighbour)) {
+				continue;
+			}
+
+			unsigned int alt = distance[current_vertex] + 1;
+
+			if (alt < distance[neighbour]) {
+				distance[neighbour] = alt;
+				predecessor[neighbour] = current_vertex;
+				vertex_queue.push(
+				    std::make_pair(alt, neighbour));
+			}
+		}
+	}
+
+	unsigned int current = destination;
+
+	// backtrack from the end (destination)
+	while (current != source) {
 		// idk.. this somehow gives back the shortest path?
 		result.push_back(current);
 		current = predecessor[current];
@@ -93,8 +174,12 @@ MazeSolver::solve(const Maze& maze, Algorithm algorithm)
 {
 	std::list<unsigned int> solution;
 	switch (algorithm) {
+	case Algorithm::BFS:
+		spBFS(maze, solution);
+		break;
 	case Algorithm::DIJKSTRA:
-		dijkstra(maze, solution);
+		spDijkstra(maze, solution);
+		break;
 	}
 	return solution;
 }

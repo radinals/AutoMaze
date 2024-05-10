@@ -30,6 +30,8 @@ class Maze
 	// list of vertex set to be a wall
 	std::vector<unsigned int> m_wall;
 
+	std::vector<std::vector<unsigned int>> m_weight_matrix;
+
 	// amount of vertex in the maze
 	size_t m_vertex_amount = 0;
 
@@ -40,24 +42,32 @@ class Maze
 	bool hasAdjacentVertex(int collumn, int line, size_t limit,
 			       Direction direction);
 
+	std::vector<std::vector<unsigned int>> generateWeight(
+	    unsigned int start_vertex) const;
+
       public:
-        Maze(size_t size) { generateMatrix(size); }
+        Maze(size_t size) { generateMatrix(size); };
 
 	// generate an empty square maze of (size x size)
 	void generateMatrix(size_t size);
 
-	// UNUSED
-	static Vector2D getDistance(const Vector2D& source,
-				    const Vector2D& destination)
+	unsigned int calculateDistance(unsigned int source,
+				       unsigned int destination) const
 	{
-		return {(source.getX() > destination.getX())
-			    ? source.getX() - destination.getX()
-			    : destination.getX() - source.getX()
+		Vector2D dest_coord;
+		Vector2D source_coord;
 
-			    ,
-			(source.getY() > destination.getY())
-			    ? source.getY() - destination.getY()
-			    : destination.getY() - source.getY()};
+		findMatrixLabelCoordinate(source, source_coord);
+		findMatrixLabelCoordinate(destination, dest_coord);
+
+		unsigned int source_weight =
+		    m_weight_matrix[source_coord.getY()][source_coord.getX()];
+		unsigned int dest_weight =
+		    m_weight_matrix[dest_coord.getY()][dest_coord.getX()];
+
+		return (source_weight < dest_weight)
+			   ? dest_weight - source_weight
+			   : source_weight - dest_weight;
 	}
 
 	// add the label to the wall list
@@ -73,16 +83,12 @@ class Maze
 	// remove all wall stored in the wall list
 	inline void clearWall() { m_wall.clear(); }
 
-	// set the start coordinates of the maze
-	inline void setStartCoordinate(const Vector2D& coordinate)
+	inline void setStartEndCoordinates(const Vector2D& start,
+					   const Vector2D end)
 	{
-		m_start = coordinate;
-	}
-
-	// set the end coordinates of the maze
-	inline void setEndCoordinate(const Vector2D& coordinate)
-	{
-		m_end = coordinate;
+		m_start = start;
+		m_end = end;
+		m_weight_matrix = generateWeight(getMatrixLabel(start));
 	}
 
 	// return the end coordinates of the maze

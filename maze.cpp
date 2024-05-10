@@ -1,6 +1,9 @@
 #include "maze.h"
 
+#include <climits>
 #include <cstddef>
+#include <map>
+#include <queue>
 #include <vector>
 
 // look in a set direction in the literal graph matrix.
@@ -55,6 +58,50 @@ Maze::getMatrixNeighbours(unsigned int label) const
 	}
 	return neighbours;
 };
+
+std::vector<std::vector<unsigned int>>
+Maze::generateWeight(unsigned int start_vertex) const
+{
+	std::vector<std::vector<unsigned int>> weight_matrix = std::vector(
+	    m_matrix_size, std::vector<unsigned int>(m_matrix_size));
+
+	std::vector<bool> visited(m_vertex_amount, false);
+
+	unsigned int INF = UINT_MAX;
+
+	std::queue<unsigned int> vertex_queue;
+	std::vector<unsigned int> distance(m_vertex_amount, INF);
+
+	distance[start_vertex] = 0;
+	vertex_queue.push(start_vertex);
+
+	while (!vertex_queue.empty()) {
+		unsigned int current_vertex = vertex_queue.front();
+		vertex_queue.pop();
+
+		for (unsigned int neighbour :
+		     getMatrixNeighbours(current_vertex)) {
+
+			if (isWall(neighbour)) {
+				continue;
+			}
+
+			if (distance[neighbour] == INF) {
+				distance[neighbour] =
+				    distance[current_vertex] + 1;
+				vertex_queue.push(neighbour);
+			}
+		}
+	}
+
+	for (size_t y = 0; y < m_matrix_size; y++) {
+		for (size_t x = 0; x < m_matrix_size; x++) {
+			weight_matrix[y][x] = distance[m_matrix[y][x]];
+		}
+	}
+
+	return weight_matrix;
+}
 
 // generate the the literal grid of the graph matrix
 // and also create the adjacency matrix of that graph
