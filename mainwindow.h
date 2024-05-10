@@ -36,6 +36,8 @@ class MainWindow : public QMainWindow
 
         void on_SetWallRadio_clicked();
 
+        void on_ExitBtn_clicked();
+
       private:
         Ui::MainWindow *ui;
 };
