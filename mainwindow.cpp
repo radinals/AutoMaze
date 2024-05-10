@@ -6,23 +6,27 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
-        ui->setupUi(this);
+	ui->setupUi(this);
+	ui->mazeSizeIn->setText(
+	    QString::fromStdString(std::to_string(m_def_maze_size)));
 
-	m_maze = new Maze(10);
-	m_renderer = new MazeRenderer(ui->RenderView, m_maze);
+	m_maze = new Maze(m_def_maze_size);
+	m_renderer = new MazeRenderer(m_maze);
+	ui->render->addWidget(m_renderer);
 }
 
 MainWindow::~MainWindow()
 {
 	delete ui;
+	delete m_maze;
+	delete m_renderer;
 }
 
 void
 MainWindow::on_ResetBtn_clicked()
 {
 	m_maze->clearWall();
-	m_maze->setEndCoordinate({0, 0});
-	m_maze->setStartCoordinate({0, 0});
+	m_maze->setStartEndCoordinates({0, 0}, {0, 0});
 	m_renderer->resetBitmap();
 	m_renderer->update();
 }
@@ -50,9 +54,9 @@ MainWindow::on_SetSourceBtn_clicked()
 	}
 
 	unsigned int label = m_maze->getMatrixLabel({x, y});
-	m_renderer->setVertexStatus(label, m_renderer->BM_SOURCE);
+	m_renderer->setVertexStatus(label, BitmapStatus::BM_SOURCE);
 
-	m_maze->setStartCoordinate({x, y});
+	m_maze->setStartEndCoordinates({x, y}, m_maze->getEndCoordinate());
 	m_renderer->update();
 }
 
@@ -80,9 +84,9 @@ MainWindow::on_SetDestinationBtn_clicked()
 	}
 
 	unsigned int label = m_maze->getMatrixLabel({x, y});
-	m_renderer->setVertexStatus(label, m_renderer->BM_END);
+	m_renderer->setVertexStatus(label, BitmapStatus::BM_END);
 
-	m_maze->setEndCoordinate({x, y});
+	m_maze->setStartEndCoordinates(m_maze->getStartCoordinate(), {x, y});
 	m_renderer->update();
 }
 
@@ -112,10 +116,10 @@ MainWindow::on_ToggleWalBtn_clicked()
 	unsigned int label = m_maze->getMatrixLabel({x, y});
 
 	if (m_maze->isWall(label)) {
-		m_renderer->setVertexStatus(label, m_renderer->BM_NORMAL);
+		m_renderer->setVertexStatus(label, BitmapStatus::BM_NORMAL);
 		m_maze->unsetWall(label);
 	} else {
-		m_renderer->setVertexStatus(label, m_renderer->BM_WALL);
+		m_renderer->setVertexStatus(label, BitmapStatus::BM_WALL);
 		m_maze->setWall(label);
 	}
 
@@ -127,7 +131,43 @@ MainWindow::on_SolveBtn_clicked()
 {
 	MazeSolver solver;
 	m_renderer->setVertexStatus(
-	    solver.solve(*m_maze, MazeSolver::Algorithm::DIJKSTRA),
-	    MazeRenderer::BM_PATH);
+	    solver.solve(*m_maze, MazeSolver::Algorithm::BFS),
+	    BitmapStatus::BM_PATH);
 	m_renderer->update();
+}
+
+void
+MainWindow::on_mazeSizeIn_editingFinished()
+{
+	unsigned int size = 0;
+	try {
+		size = ui->mazeSizeIn->text().toUInt();
+	} catch (...) {
+		ui->mazeSizeIn->setText(
+		    QString::fromStdString(std::to_string(m_def_maze_size)));
+		return;
+	}
+
+	m_maze->generateMatrix(size);
+	m_renderer->resetBitmap();
+	m_renderer->update();
+}
+
+void
+MainWindow::on_SetSourceRadio_clicked()
+{
+	m_renderer->setUiMode(MazeUiMode::UM_DrawSource);
+}
+
+void
+MainWindow::on_SetDestRadio_clicked()
+{
+
+	m_renderer->setUiMode(MazeUiMode::UM_DrawEnd);
+}
+
+void
+MainWindow::on_SetWallRadio_clicked()
+{
+	m_renderer->setUiMode(MazeUiMode::UM_DrawWall);
 }

@@ -19,6 +19,7 @@ class MainWindow : public QMainWindow
 
 	MazeRenderer *m_renderer;
 	Maze *m_maze;
+	const unsigned int m_def_maze_size = 10;
 
       public:
         MainWindow(QWidget *parent = nullptr);
@@ -34,6 +35,14 @@ class MainWindow : public QMainWindow
         void on_ToggleWalBtn_clicked();
 
         void on_SolveBtn_clicked();
+
+        void on_mazeSizeIn_editingFinished();
+
+        void on_SetSourceRadio_clicked();
+
+        void on_SetDestRadio_clicked();
+
+        void on_SetWallRadio_clicked();
 
       private:
         Ui::MainWindow *ui;
