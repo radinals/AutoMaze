@@ -82,13 +82,14 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 	switch (event->button()) {
 	case Qt::LeftButton:
 		position = mapToScene(event->pos());
-		if (position.x() * position.y() >
-			((m_cell_height * m_cell_width) *
-			 m_maze->getVertexAmount()) ||
-		    position.x() < 0 || position.x() < 0)
-			return;
 		break;
 	default:
+		return;
+	}
+
+	if (position.x() >= (m_cell_width * m_maze->getMatrixSize()) ||
+	    position.y() >= (m_cell_width * m_maze->getMatrixSize()) ||
+	    position.x() <= 0 || position.y() <= 0) {
 		return;
 	}
 
