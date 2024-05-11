@@ -25,12 +25,12 @@ enum class MazeUiMode {
 class MazeRenderer : public QGraphicsView
 {
       private:
-        Maze* m_maze;
-        QGraphicsScene* m_scene;
-        std::vector<std::vector<BitmapStatus>> m_bitmap;
-        MazeUiMode m_ui_mode = MazeUiMode::UM_None;
-        size_t m_cell_width = 0;
-        size_t m_cell_height = 0;
+	Maze* m_maze;
+	QGraphicsScene* m_scene;
+	std::vector<std::vector<BitmapStatus>> m_bitmap;
+	MazeUiMode m_ui_mode = MazeUiMode::UM_None;
+	size_t m_cell_width = 0;
+	size_t m_cell_height = 0;
 
 	// create the scene
 	void generateScene();
@@ -41,14 +41,14 @@ class MazeRenderer : public QGraphicsView
 	unsigned int calcVertexMouseClick(float x, float y);
 
       protected:
-        void mousePressEvent(QMouseEvent* event) override;
+	void mousePressEvent(QMouseEvent* event) override;
 
       public:
 	MazeRenderer(Maze*& maze, QWidget* parent = nullptr);
 
 	// set multiple cell type
 	void setVertexStatus(std::list<unsigned int> labels,
-			     BitmapStatus status);
+	                     BitmapStatus status);
 
 	void setUiMode(MazeUiMode mode) { m_ui_mode = mode; };
 
