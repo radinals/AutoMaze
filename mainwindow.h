@@ -3,6 +3,7 @@
 
 #include "maze.h"
 #include "mazerenderer.h"
+#include "mazesolver.h"
 
 #include <QMainWindow>
 
@@ -17,9 +18,21 @@ class MainWindow : public QMainWindow
 {
 	Q_OBJECT
 
+	MazeSolver::Algorithm m_solver_algorithm = MazeSolver::Algorithm::BFS;
+	Maze::WeightLevel m_draw_weight = Maze::WeightLevel::None;
+
 	MazeRenderer *m_renderer;
 	Maze *m_maze;
+
 	const unsigned int m_def_maze_size = 10;
+
+	QAction *e_useBFSAlgorithm;
+	QAction *e_useDijkstraAlgorithm;
+
+	QAction *e_useHighWeight;
+	QAction *e_useMedWeight;
+	QAction *e_useLowWeight;
+	QAction *e_useNoWeight;
 
       public:
         MainWindow(QWidget *parent = nullptr);
@@ -37,6 +50,12 @@ class MainWindow : public QMainWindow
         void on_SetWallRadio_clicked();
 
         void on_ExitBtn_clicked();
+
+        void on_SetWeightRadio_clicked();
+
+        void on_WeightSelMenu_triggered(QAction *arg1);
+
+        void on_AlgorithmSelMenu_triggered(QAction *arg1);
 
       private:
         Ui::MainWindow *ui;

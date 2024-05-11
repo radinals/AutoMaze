@@ -10,12 +10,21 @@
 
 class Maze
 {
-	enum Direction {
-		UP,
-		DOWN,
-		LEFT,
-		RIGHT
-	};
+      public:
+        enum class WeightLevel {
+                None,
+                Low,
+                Medium,
+                High
+        };
+
+      private:
+        enum Direction {
+                UP,
+                DOWN,
+                LEFT,
+                RIGHT
+        };
 
 	// start end end of the maze
 	Vector2D m_start = {-1, -1};
@@ -69,6 +78,8 @@ class Maze
 			   ? dest_weight - source_weight
 			   : source_weight - dest_weight;
 	}
+
+	void setVertexWeight(unsigned int label, WeightLevel level);
 
 	// add the label to the wall list
 	inline void setWall(unsigned int label) { m_wall.push_back(label); }

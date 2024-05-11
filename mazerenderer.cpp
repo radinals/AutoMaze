@@ -185,6 +185,59 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 			m_maze->unsetWall(clicked_vertex);
 		}
 	} break;
+	case MazeUiMode::UM_DrawWeight:
+		if (m_maze->getStartCoordinate() < Vector2D(0, 0)) {
+			return;
+		}
+		switch (m_weight_level) {
+		case Maze::WeightLevel::High:
+			if (vertexBitmapStatus(clicked_vertex) ==
+			    BitmapStatus::BM_WeightHigh) {
+				setVertexStatus(clicked_vertex,
+						BitmapStatus::BM_WeightNone);
+				m_maze->setVertexWeight(
+				    clicked_vertex, Maze::WeightLevel::None);
+				update();
+				return;
+			}
+			setVertexStatus(clicked_vertex,
+					BitmapStatus::BM_WeightHigh);
+			break;
+		case Maze::WeightLevel::Medium:
+			if (vertexBitmapStatus(clicked_vertex) ==
+			    BitmapStatus::BM_WeightMedium) {
+				setVertexStatus(clicked_vertex,
+						BitmapStatus::BM_WeightNone);
+				m_maze->setVertexWeight(
+				    clicked_vertex, Maze::WeightLevel::None);
+				update();
+				return;
+			}
+			setVertexStatus(clicked_vertex,
+					BitmapStatus::BM_WeightMedium);
+			break;
+		case Maze::WeightLevel::Low:
+			if (vertexBitmapStatus(clicked_vertex) ==
+			    BitmapStatus::BM_WeightLow) {
+				setVertexStatus(clicked_vertex,
+						BitmapStatus::BM_WeightNone);
+				m_maze->setVertexWeight(
+				    clicked_vertex, Maze::WeightLevel::None);
+				update();
+				return;
+			}
+			setVertexStatus(clicked_vertex,
+					BitmapStatus::BM_WeightLow);
+			break;
+		case Maze::WeightLevel::None:
+			setVertexStatus(clicked_vertex,
+					BitmapStatus::BM_WeightNone);
+			break;
+		}
+
+		m_maze->setVertexWeight(clicked_vertex, m_weight_level);
+		break;
+
 	default:
 		return;
 	}
@@ -217,17 +270,27 @@ MazeRenderer::generateScene()
 
 			switch (cell) {
 			case BitmapStatus::BM_END:
-				color = QBrush(Qt::yellow, Qt::SolidPattern);
+				color = QBrush(Qt::red, Qt::SolidPattern);
 				break;
 			case BitmapStatus::BM_SOURCE:
-				color = QBrush(Qt::green, Qt::SolidPattern);
+				color = QBrush(Qt::yellow, Qt::SolidPattern);
 				break;
 			case BitmapStatus::BM_PATH:
-				color = QBrush(Qt::blue, Qt::SolidPattern);
+				color = QBrush(Qt::magenta, Qt::SolidPattern);
 				break;
 			case BitmapStatus::BM_WALL:
 				color = QBrush(Qt::black, Qt::SolidPattern);
 				break;
+			case BitmapStatus::BM_WeightHigh:
+				color = QBrush(Qt::blue, Qt::SolidPattern);
+				break;
+			case BitmapStatus::BM_WeightMedium:
+				color = QBrush(Qt::cyan, Qt::SolidPattern);
+				break;
+			case BitmapStatus::BM_WeightLow:
+				color = QBrush(Qt::green, Qt::SolidPattern);
+				break;
+			case BitmapStatus::BM_WeightNone:
 			default:
 				color = QBrush(Qt::white, Qt::SolidPattern);
 				break;
@@ -241,6 +304,15 @@ MazeRenderer::generateScene()
 		y++;
 		x = 0;
 	}
+}
+
+BitmapStatus
+MazeRenderer::vertexBitmapStatus(unsigned int label)
+{
+	Vector2D coordinate;
+	m_maze->findMatrixLabelCoordinate(label, coordinate);
+
+	return m_bitmap[coordinate.getY()][coordinate.getX()];
 }
 
 // generate and load the scene

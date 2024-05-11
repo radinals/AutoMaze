@@ -2,7 +2,6 @@
 
 #include <climits>
 #include <cstddef>
-#include <map>
 #include <queue>
 #include <vector>
 
@@ -160,4 +159,30 @@ Maze::generateMatrix(size_t size)
 			}
 		}
 	}
+}
+
+void
+Maze::setVertexWeight(unsigned int label, WeightLevel level)
+{
+	Vector2D coord;
+	findMatrixLabelCoordinate(label, coord);
+
+	unsigned int weight = 0;
+
+	switch (level) {
+	case WeightLevel::High:
+		weight = 50;
+		break;
+	case WeightLevel::Medium:
+		weight = 20;
+		break;
+	case WeightLevel::Low:
+		weight = 10;
+		break;
+	default:
+		weight = 1;
+		break;
+	}
+
+	m_weight_matrix[coord.getY()][coord.getX()] = weight;
 }
