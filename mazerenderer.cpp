@@ -7,6 +7,18 @@
 #include <QRect>
 #include <cmath>
 
+MazeRenderer::MazeRenderer(Maze*& maze, QWidget* parent)
+    : QGraphicsView(parent), m_maze(maze)
+{
+	setScene(new QGraphicsScene(this));
+	setGeometry(0, 0, 500, 500);
+	m_cell_width = std::floor(width() / m_maze->getMatrixSize());
+	m_cell_height = std::floor(height() / m_maze->getMatrixSize());
+	this->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
+	generateBitmap();
+	update();
+};
+
 // set vertex's cell status in the bitmap
 void
 MazeRenderer::setVertexStatus(std::list<unsigned int> labels,
