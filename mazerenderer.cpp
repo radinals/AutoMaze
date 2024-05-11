@@ -127,18 +127,16 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 					BitmapStatus::BM_NORMAL);
 		}
 
-		unsigned int end_vertex;
-		if (m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
-			end_vertex =
-			    m_maze->getMatrixLabel(m_maze->getEndCoordinate());
-		}
-
 		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
 		    m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
 
+			unsigned int end_vertex =
+			    m_maze->getMatrixLabel(m_maze->getEndCoordinate());
+
 			if (end_vertex == clicked_vertex ||
-			    clicked_vertex == old_start_vertex)
+			    clicked_vertex == old_start_vertex) {
 				return;
+			}
 		}
 
 		Vector2D tmp;
@@ -155,12 +153,6 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 	} break;
 	case MazeUiMode::UM_DrawEnd: {
 
-		unsigned int start_vertex;
-		if (m_maze->getStartCoordinate() >= Vector2D(0, 0)) {
-			start_vertex = m_maze->getMatrixLabel(
-			    m_maze->getStartCoordinate());
-		}
-
 		unsigned int old_end_vertex;
 		if (m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
 			old_end_vertex =
@@ -172,9 +164,13 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
 		    m_maze->getEndCoordinate() >= Vector2D(0, 0)) {
 
+			unsigned int start_vertex = m_maze->getMatrixLabel(
+			    m_maze->getStartCoordinate());
+
 			if (old_end_vertex == clicked_vertex ||
-			    clicked_vertex == start_vertex)
+			    clicked_vertex == start_vertex) {
 				return;
+			}
 		}
 
 		Vector2D tmp;
