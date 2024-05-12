@@ -39,7 +39,8 @@ class Maze
 	// list of vertex set to be a wall
 	std::vector<unsigned int> m_wall;
 
-	std::vector<std::vector<unsigned int>> m_weight_matrix;
+	std::vector<unsigned int> m_weight_matrix;
+	std::vector<std::vector<unsigned int>> m_distance_matrix;
 
 	// amount of vertex in the maze
 	size_t m_vertex_amount = 0;
@@ -55,10 +56,21 @@ class Maze
 	    unsigned int start_vertex) const;
 
       public:
-        Maze(size_t size) { generateMatrix(size); };
+        Maze(size_t size)
+        {
+                generateMatrix(size);
+                m_weight_matrix = std::vector<unsigned int>(size, 0);
+        };
 
 	// generate an empty square maze of (size x size)
 	void generateMatrix(size_t size);
+
+	unsigned int getWeight(unsigned int label) const
+	{
+		Vector2D coord;
+		findMatrixLabelCoordinate(label, coord);
+		return m_weight_matrix[label];
+	}
 
 	unsigned int calculateDistance(unsigned int source,
 				       unsigned int destination) const
@@ -70,9 +82,9 @@ class Maze
 		findMatrixLabelCoordinate(destination, dest_coord);
 
 		unsigned int source_weight =
-		    m_weight_matrix[source_coord.getY()][source_coord.getX()];
+		    m_distance_matrix[source_coord.getY()][source_coord.getX()];
 		unsigned int dest_weight =
-		    m_weight_matrix[dest_coord.getY()][dest_coord.getX()];
+		    m_distance_matrix[dest_coord.getY()][dest_coord.getX()];
 
 		return (source_weight < dest_weight)
 			   ? dest_weight - source_weight
@@ -101,7 +113,7 @@ class Maze
 		m_end = end;
 		if (m_start < Vector2D(0, 0))
 			return;
-		m_weight_matrix = generateWeight(getMatrixLabel(start));
+		m_distance_matrix = generateWeight(getMatrixLabel(start));
 	}
 
 	// return the end coordinates of the maze

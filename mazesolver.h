@@ -3,6 +3,7 @@
 
 #include "maze.h"
 
+#include <exception>
 #include <list>
 
 class MazeSolver
@@ -27,5 +28,14 @@ class MazeSolver
 
         std::list<unsigned int> solve(const Maze& maze, Algorithm algorithm);
 };
+
+namespace MazeSolverException
+{
+	class NoSolutionFound : public std::exception
+	{
+		const char* what = "NoSolutionFound";
+	};
+
+} // namespace MazeSolverException
 
 #endif // !MAZESOLVER_H

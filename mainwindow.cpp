@@ -3,6 +3,8 @@
 #include "./ui_mainwindow.h"
 #include "mazesolver.h"
 
+#include <QMessageBox>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow)
 {
@@ -62,8 +64,15 @@ MainWindow::on_SolveBtn_clicked()
 		return;
 	}
 
-	m_renderer->setVertexStatus(solver.solve(*m_maze, m_solver_algorithm),
-				    BitmapStatus::BM_PATH);
+	try {
+		m_renderer->setVertexStatus(
+		    solver.solve(*m_maze, m_solver_algorithm),
+		    BitmapStatus::BM_PATH);
+	} catch (MazeSolverException::NoSolutionFound) {
+		QMessageBox::warning(this, tr("Error"),
+				     tr("No Valid Path Can Be Found!"));
+	}
+
 	m_renderer->update();
 }
 

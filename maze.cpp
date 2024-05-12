@@ -180,9 +180,9 @@ Maze::setVertexWeight(unsigned int label, WeightLevel level)
 		weight = 10;
 		break;
 	default:
-		weight = 1;
+		weight = 0;
 		break;
 	}
 
-	m_weight_matrix[coord.getY()][coord.getX()] = weight;
+	m_weight_matrix[label] = weight;
 }
