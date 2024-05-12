@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
 	e_useHighWeight = new QAction("High: 50", this);
 	e_useMedWeight = new QAction("Medium: 20", this);
 	e_useLowWeight = new QAction("Low: 10", this);
-	e_useNoWeight = new QAction("None: 0");
+	e_useNoWeight = new QAction("None: 0", this);
 
 	ui->WeightSelMenu->addAction(e_useHighWeight);
 	ui->WeightSelMenu->addAction(e_useMedWeight);
@@ -49,6 +49,7 @@ MainWindow::on_ResetBtn_clicked()
 {
 	m_maze->clearWall();
 	m_maze->setStartEndCoordinates({-1, -1}, {-1, -1});
+	m_maze->resetWeights();
 	m_renderer->resetBitmap();
 	m_renderer->update();
 }

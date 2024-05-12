@@ -164,9 +164,6 @@ Maze::generateMatrix(size_t size)
 void
 Maze::setVertexWeight(unsigned int label, WeightLevel level)
 {
-	Vector2D coord;
-	findMatrixLabelCoordinate(label, coord);
-
 	unsigned int weight = 0;
 
 	switch (level) {

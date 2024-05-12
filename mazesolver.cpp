@@ -48,6 +48,7 @@ MazeSolver::spBFS(const Maze& maze, std::list<unsigned int>& result)
 
 		// if current vertex is the destination, exit the loop
 		if (current_vertex == destination) {
+			reached_destination = true;
 			break;
 		}
 
@@ -98,7 +99,6 @@ MazeSolver::spBFS(const Maze& maze, std::list<unsigned int>& result)
 void
 MazeSolver::spDijkstra(const Maze& maze, std::list<unsigned int>& result)
 {
-	// destination and source
 	const unsigned int source =
 	    maze.getMatrixLabel(maze.getStartCoordinate());
 	const unsigned int destination =
@@ -106,25 +106,20 @@ MazeSolver::spDijkstra(const Maze& maze, std::list<unsigned int>& result)
 
 	const unsigned int INF = UINT_MAX;
 
-	// all distance is set to infinite
 	std::vector<unsigned int> distance(maze.getVertexAmount(), INF);
+	std::vector<bool> visited(maze.getVertexAmount(), false);
 
-	// map of a labels predecessor
 	std::map<unsigned int, unsigned int> predecessor;
-
-	// set all label predecessor to 0
 	for (unsigned int label = 0; label < maze.getVertexAmount(); label++) {
 		predecessor[label] = 0;
 	}
 
-	// set distance of the source (start) to 0
+	using pii = std::pair<unsigned int, unsigned int>;
+	std::priority_queue<pii, std::vector<pii>, std::greater<pii>>
+	    vertex_queue;
+
 	distance[source] = 0;
-
-	// queue of vertexis that's being processed
-	std::priority_queue<std::pair<unsigned int, unsigned int>> vertex_queue;
-
-	// push the source vertex to the queue
-	vertex_queue.push(std::make_pair(0, source));
+	vertex_queue.push(std::make_pair(distance[source], source));
 
 	bool reached_destination = false;
 
@@ -134,32 +129,35 @@ MazeSolver::spDijkstra(const Maze& maze, std::list<unsigned int>& result)
 		unsigned int current_vertex = vertex_queue.top().second;
 		vertex_queue.pop();
 
-		// if current vertex is the destination, exit the loop
 		if (current_vertex == destination) {
 			reached_destination = true;
 			break;
 		}
 
-		// for every neighbour of the current vertex
+		if (visited[current_vertex]) {
+			continue;
+		} else {
+			visited[current_vertex] = true;
+		}
+
 		for (unsigned int neighbour :
 		     maze.getMatrixNeighbours(current_vertex)) {
+			unsigned int weight =
+			    maze.getWeight(neighbour) +
+			    maze.calculateDistance(current_vertex, neighbour);
 
-			// if the current neigbour is a wall, skip it
 			if (maze.isWall(neighbour)) {
 				continue;
 			}
 
-			unsigned int alt =
-			    maze.getWeight(neighbour) +
-			    maze.calculateDistance(neighbour, destination);
-
-			if (distance[current_vertex] + alt <
-			    distance[neighbour]) {
+			if (!visited[neighbour] &&
+			    distance[current_vertex] + weight <
+				distance[neighbour]) {
 				distance[neighbour] =
-				    distance[current_vertex] + alt;
+				    distance[current_vertex] + weight;
 				predecessor[neighbour] = current_vertex;
-				vertex_queue.push(
-				    std::make_pair(alt, neighbour));
+				vertex_queue.push(std::make_pair(
+				    distance[neighbour], neighbour));
 			}
 		}
 	}

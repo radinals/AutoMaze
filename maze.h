@@ -59,7 +59,8 @@ class Maze
         Maze(size_t size)
         {
                 generateMatrix(size);
-                m_weight_matrix = std::vector<unsigned int>(size, 0);
+                m_weight_matrix =
+                    std::vector<unsigned int>(getVertexAmount(), 0);
         };
 
 	// generate an empty square maze of (size x size)
@@ -155,6 +156,12 @@ class Maze
 	inline std::vector<std::vector<unsigned int>> getMatrix() const
 	{
 		return m_matrix;
+	}
+
+	inline void resetWeights()
+	{
+		m_weight_matrix =
+		    std::vector<unsigned int>(getVertexAmount(), 0);
 	}
 
 	inline size_t getVertexAmount() const { return m_vertex_amount; }

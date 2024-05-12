@@ -117,6 +117,8 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 			setVertexStatus(clicked_vertex, BitmapStatus::BM_WALL);
 			m_maze->setWall(clicked_vertex);
 		}
+		m_maze->setVertexWeight(clicked_vertex,
+					Maze::WeightLevel::None);
 	} break;
 	case MazeUiMode::UM_DrawSource: {
 
@@ -150,6 +152,9 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 		if (m_maze->isWall(clicked_vertex)) {
 			m_maze->unsetWall(clicked_vertex);
 		}
+
+		m_maze->setVertexWeight(clicked_vertex,
+					Maze::WeightLevel::None);
 
 	} break;
 	case MazeUiMode::UM_DrawEnd: {
@@ -189,6 +194,23 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 		if (m_maze->getStartCoordinate() < Vector2D(0, 0)) {
 			return;
 		}
+
+		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getMatrixLabel(m_maze->getStartCoordinate()) ==
+			clicked_vertex) {
+			return;
+		}
+
+		if (m_maze->getEndCoordinate() >= Vector2D(0, 0) &&
+		    m_maze->getMatrixLabel(m_maze->getEndCoordinate()) ==
+			clicked_vertex) {
+			return;
+		}
+
+		if (m_maze->isWall(clicked_vertex)) {
+			m_maze->unsetWall(clicked_vertex);
+		}
+
 		switch (m_weight_level) {
 		case Maze::WeightLevel::High:
 			if (vertexBitmapStatus(clicked_vertex) ==
