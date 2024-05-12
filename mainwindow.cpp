@@ -130,6 +130,12 @@ MainWindow::on_WeightSelMenu_triggered(QAction *arg1)
 void
 MainWindow::on_AlgorithmSelMenu_triggered(QAction *arg1)
 {
+	m_maze->clearWall();
+	m_maze->setStartEndCoordinates({-1, -1}, {-1, -1});
+	m_maze->resetWeights();
+	m_renderer->resetBitmap();
+	m_renderer->update();
+
 	if (arg1 == e_useBFSAlgorithm) {
 		m_solver_algorithm = MazeSolver::Algorithm::BFS;
 		ui->AlgorithmSelMenu->setText("BFS");
