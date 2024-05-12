@@ -191,10 +191,6 @@ MazeRenderer::mousePressEvent(QMouseEvent* event)
 		}
 	} break;
 	case MazeUiMode::UM_DrawWeight:
-		if (m_maze->getStartCoordinate() < Vector2D(0, 0)) {
-			return;
-		}
-
 		if (m_maze->getStartCoordinate() >= Vector2D(0, 0) &&
 		    m_maze->getMatrixLabel(m_maze->getStartCoordinate()) ==
 			clicked_vertex) {
