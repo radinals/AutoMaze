@@ -1,8 +1,6 @@
 #ifndef VECTOR2D_H
 #define VECTOR2D_H
 
-#include <cstdint>
-
 class Vector2D
 {
       private:
