@@ -6,15 +6,26 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1269</width>
-    <height>863</height>
+    <width>1515</width>
+    <height>932</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>AutoMaze</string>
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">
+background-color: rgb(32, 100, 190);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
+    <item row="0" column="0">
+     <layout class="QGridLayout" name="render">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetFixedSize</enum>
+      </property>
+     </layout>
+    </item>
     <item row="0" column="1">
      <widget class="QFrame" name="frame">
       <property name="sizePolicy">
@@ -29,6 +40,13 @@
         <height>200</height>
        </size>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 600 12pt &quot;Lucida Bright&quot;;
+color: rgb(255, 255, 255);
+background-color: rgb(39, 123, 232);
+border-radius : 20px;
+</string>
+      </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
       </property>
@@ -36,69 +54,109 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="2">
+        <layout class="QHBoxLayout" name="horizontalLayout_2"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QPushButton" name="ResetBtn">
+         <property name="font">
+          <font>
+           <family>Lucida Bright</family>
+           <pointsize>12</pointsize>
+           <italic>false</italic>
+           <fontweight>DemiBold</fontweight>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+height : 25px;
+color: rgb(0, 0, 0);
+border-radius : 10px;
+width : 130px;
+</string>
+         </property>
+         <property name="text">
+          <string>RESET</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QPushButton" name="SolveBtn">
+         <property name="font">
+          <font>
+           <family>Lucida Bright</family>
+           <pointsize>12</pointsize>
+           <italic>false</italic>
+           <fontweight>DemiBold</fontweight>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);
+border-radius : 10px;
+height : 25px;</string>
+         </property>
+         <property name="text">
+          <string>SOLVE</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="1">
-        <layout class="QVBoxLayout" name="verticalLayout">
-         <item>
-          <layout class="QHBoxLayout" name="horizontalLayout_2">
-           <item>
-            <widget class="QPushButton" name="SolveBtn">
-             <property name="font">
-              <font>
-               <pointsize>14</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>SOLVE</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QToolButton" name="AlgorithmSelMenu">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-         <item>
-          <widget class="QPushButton" name="ExitBtn">
-           <property name="font">
-            <font>
-             <pointsize>18</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>EXIT</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="ResetBtn">
-           <property name="font">
-            <font>
-             <pointsize>18</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>RESET</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <layout class="QVBoxLayout" name="verticalLayout"/>
+       </item>
+       <item row="3" column="2">
+        <widget class="QPushButton" name="ExitBtn">
+         <property name="font">
+          <font>
+           <family>Lucida Bright</family>
+           <pointsize>12</pointsize>
+           <italic>false</italic>
+           <fontweight>DemiBold</fontweight>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);
+border-radius : 10px;
+height : 25px;
+</string>
+         </property>
+         <property name="text">
+          <string>EXIT</string>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
+         <item row="4" column="1" colspan="2">
+          <widget class="QToolButton" name="WeightSelMenu">
+           <property name="font">
+            <font>
+             <family>Lucida Bright</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <fontweight>DemiBold</fontweight>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);
+border-radius : 10px;
+width : 130px;</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
           <widget class="QRadioButton" name="SetSourceRadio">
            <property name="font">
             <font>
+             <family>Lucida Bright</family>
              <pointsize>12</pointsize>
+             <italic>false</italic>
+             <fontweight>DemiBold</fontweight>
             </font>
            </property>
            <property name="text">
@@ -106,7 +164,51 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="0">
+         <item row="1" column="2">
+          <widget class="QRadioButton" name="SetWallRadio">
+           <property name="font">
+            <font>
+             <family>Lucida Bright</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <fontweight>DemiBold</fontweight>
+            </font>
+           </property>
+           <property name="text">
+            <string>Draw Wall</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1" colspan="2">
+          <widget class="QToolButton" name="AlgorithmSelMenu">
+           <property name="font">
+            <font>
+             <family>Lucida Bright</family>
+             <pointsize>12</pointsize>
+             <italic>false</italic>
+             <fontweight>DemiBold</fontweight>
+            </font>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">background-color: rgb(255, 255, 255);
+color: rgb(0, 0, 0);
+border-radius : 10px;
+width : 130px;
+QToolButton { border-radius: 10px; }</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QLabel" name="label">
+           <property name="text">
+            <string>Select Algorithm : </string>
+           </property>
+          </widget>
+         </item>
+         <item row="4" column="0">
           <layout class="QHBoxLayout" name="horizontalLayout">
            <property name="spacing">
             <number>1</number>
@@ -118,7 +220,10 @@
              </property>
              <property name="font">
               <font>
+               <family>Lucida Bright</family>
                <pointsize>12</pointsize>
+               <italic>false</italic>
+               <fontweight>DemiBold</fontweight>
               </font>
              </property>
              <property name="text">
@@ -126,37 +231,16 @@
              </property>
             </widget>
            </item>
-           <item>
-            <widget class="QToolButton" name="WeightSelMenu">
-             <property name="font">
-              <font>
-               <pointsize>12</pointsize>
-              </font>
-             </property>
-             <property name="text">
-              <string>...</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
-         <item row="2" column="0">
-          <widget class="QRadioButton" name="SetWallRadio">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Draw Wall</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
+         <item row="1" column="1">
           <widget class="QRadioButton" name="SetDestRadio">
            <property name="font">
             <font>
+             <family>Lucida Bright</family>
              <pointsize>12</pointsize>
+             <italic>false</italic>
+             <fontweight>DemiBold</fontweight>
             </font>
            </property>
            <property name="text">
@@ -169,13 +253,6 @@
       </layout>
      </widget>
     </item>
-    <item row="0" column="0">
-     <layout class="QGridLayout" name="render">
-      <property name="sizeConstraint">
-       <enum>QLayout::SetFixedSize</enum>
-      </property>
-     </layout>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -183,8 +260,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1269</width>
-     <height>22</height>
+     <width>1515</width>
+     <height>25</height>
     </rect>
    </property>
   </widget>
